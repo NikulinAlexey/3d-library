@@ -1,9 +1,3 @@
-// import * as THREE from "three";
-// import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-// import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-// import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
-// import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
-
 // Импорты через import map (без указания node_modules)
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -18,6 +12,12 @@ const modelsList = [
     name: "Мышка-v1",
     path: "./models/mouse-v1/model.glb",
     format: "glb",
+  },
+  {
+    id: 2,
+    name: "Собака-v1",
+    path: "./models/dog-v1/model.glb",
+    format: "fbx",
   },
   // ДОБАВЛЯЙТЕ НОВЫЕ МОДЕЛИ ПО ШАБЛОНУ:
   // {
