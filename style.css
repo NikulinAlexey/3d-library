@@ -32,6 +32,8 @@ body {
   align-items: center;
   font-weight: 500;
   color: white;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .model-selector label {
