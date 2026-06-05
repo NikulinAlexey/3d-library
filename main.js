@@ -15,8 +15,8 @@ import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 const modelsList = [
   {
     id: 1,
-    name: "Дом",
-    path: "/models/mouse-v1/model.glb",
+    name: "Мышка-v1",
+    path: "./models/mouse-v1/model.glb",
     format: "glb",
   },
   // ДОБАВЛЯЙТЕ НОВЫЕ МОДЕЛИ ПО ШАБЛОНУ:
