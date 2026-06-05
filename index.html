@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>3D Model Viewer</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Добавляем favicon чтобы убрать ошибку 404 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
 </head>
 <body>
     <canvas id="modelCanvas" class="model-canvas"></canvas>
@@ -24,7 +26,7 @@
     
     <div class="error-message" id="errorMsg" style="display: none;"></div>
     
-    <!-- Import Map для CDN -->
+    <!-- Импорты через CDN с правильными путями -->
     <script type="importmap">
         {
             "imports": {
