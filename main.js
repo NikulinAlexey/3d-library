@@ -8,19 +8,19 @@ import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 // ===== МАССИВ МОДЕЛЕЙ - ДОБАВЛЯЙТЕ МОДЕЛИ СЮДА =====
 const modelsList = [
   {
-    id: 0,
+    id: 1,
     name: "Мышка-v1",
     path: "./models/mouse-v1/model.glb",
     format: "glb",
   },
   {
-    id: 1,
+    id: 2,
     name: "Электронка-v1",
     path: "./models/vape-v1/model.glb",
     format: "glb",
   },
   {
-    id: 2,
+    id: 3,
     name: "Повербанк-v1",
     path: "./models/powerbank-v1/model.glb",
     format: "glb",
