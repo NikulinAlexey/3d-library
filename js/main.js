@@ -4,15 +4,15 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
-import { CONFIG } from "./js/config.js";
-import { setupLighting, setupHelpers } from "./js/sceneManager.js";
-import { loadModel, removeCurrentModel } from "./js/modelLoader.js";
+import { CONFIG } from "/config.js";
+import { setupLighting, setupHelpers } from "/sceneManager.js";
+import { loadModel, removeCurrentModel } from "/modelLoader.js";
 import {
   initUI,
   showLoading,
   showError,
   updateCameraControls,
-} from "./js/uiController.js";
+} from "/uiController.js";
 
 // Глобальные переменные
 let scene, camera, renderer, controls;
