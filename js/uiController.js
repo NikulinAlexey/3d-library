@@ -32,7 +32,11 @@ export function initUI(models, onSelectModel) {
 }
 
 export function showLoading(loadingIndicator, show) {
-  if (loadingIndicator) loadingIndicator.classList.add = "_visible";
+  if (loadingIndicator && show) {
+    loadingIndicator.classList.add = "_visible";
+  } else {
+    loadingIndicator.classList.remove = "_visible";
+  }
 }
 
 export function showError(errorDiv, message) {
