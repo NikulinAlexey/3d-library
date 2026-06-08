@@ -25,6 +25,12 @@ const modelsList = [
     path: "./models/powerbank-v1/model.glb",
     format: "glb",
   },
+  {
+    id: 4,
+    name: "Нолик-v1",
+    path: "./models/nolik-v1/model.glb",
+    format: "glb",
+  },
   // ДОБАВЛЯЙТЕ НОВЫЕ МОДЕЛИ ПО ШАБЛОНУ:
   // {
   //     id: 4,
