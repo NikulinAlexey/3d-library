@@ -1,3 +1,5 @@
+const loadingIndicator = document.querySelector("loadingIndicator");
+
 export function initUI(models, onSelectModel) {
   const selectEl = document.getElementById("modelSelect");
   const errorDiv = document.getElementById("errorMsg");
@@ -27,28 +29,10 @@ export function initUI(models, onSelectModel) {
     const selectedModel = models.find((m) => m.id === selectedId);
     if (selectedModel) onSelectModel(selectedModel);
   };
-
-  // Create loading indicator if not exists
-  let loadingDiv = document.getElementById("loadingIndicator");
-  if (!loadingDiv) {
-    loadingDiv = document.createElement("div");
-    loadingDiv.id = "loadingIndicator";
-    loadingDiv.style.position = "absolute";
-    loadingDiv.style.bottom = "20px";
-    loadingDiv.style.right = "20px";
-    loadingDiv.style.background = "rgba(0,0,0,0.7)";
-    loadingDiv.style.color = "white";
-    loadingDiv.style.padding = "8px 15px";
-    loadingDiv.style.borderRadius = "20px";
-    loadingDiv.style.fontFamily = "monospace";
-    loadingDiv.style.display = "none";
-    loadingDiv.textContent = "⏳ Загрузка модели...";
-    document.body.appendChild(loadingDiv);
-  }
 }
 
-export function showLoading(loadingDiv, show) {
-  if (loadingDiv) loadingDiv.style.display = show ? "block" : "none";
+export function showLoading(loadingIndicator, show) {
+  if (loadingIndicator) loadingIndicator.classList.add = "_visible";
 }
 
 export function showError(errorDiv, message) {
