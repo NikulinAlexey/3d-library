@@ -1,4 +1,3 @@
-// uiController.js
 export function initUI(models, onSelectModel) {
   const selectEl = document.getElementById("modelSelect");
   const errorDiv = document.getElementById("errorMsg");
