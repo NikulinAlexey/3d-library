@@ -1,4 +1,4 @@
-const rootUrl = "3d-library/";
+const rootUrl = "3d-library";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";

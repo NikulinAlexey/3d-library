@@ -1,4 +1,3 @@
-// config.js
 export const CONFIG = {
   // URL до вашего JSON-файла со списком моделей
   MODELS_LIST_URL: "https://nikulinalexey.github.io/ar-models/models.json",
