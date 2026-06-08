@@ -1,4 +1,4 @@
-const loadingIndicator = document.querySelector("loadingIndicator");
+const loadingIndicator = document.querySelector("loading-indicator");
 
 export function initUI(models, onSelectModel) {
   const selectEl = document.getElementById("modelSelect");

@@ -36,7 +36,7 @@ async function fetchModelsList() {
 }
 
 async function onSelectModel(modelInfo) {
-  const loadingIndicator = document.querySelector("loadingIndicator");
+  const loadingIndicator = document.querySelector("loading-indicator");
   const errorDiv = document.getElementById("errorMsg");
 
   showLoading(loadingIndicator, true);

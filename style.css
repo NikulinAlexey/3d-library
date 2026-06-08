@@ -98,7 +98,7 @@ select option {
   transition: opacity 0.3s;
 }
 
-.loadingIndicator {
+.loading-indicator {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -111,24 +111,8 @@ select option {
   display: none;
 }
 
-.loadingIndicator._visible {
+.loading-indicator._visible {
   display: block;
-}
-
-.loading-indicator {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 12px 24px;
-  border-radius: 40px;
-  font-size: 14px;
-  z-index: 200;
-  pointer-events: none;
-  font-family: monospace;
-  backdrop-filter: blur(5px);
 }
 
 @media (max-width: 600px) {
