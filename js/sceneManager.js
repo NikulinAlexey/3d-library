@@ -1,5 +1,6 @@
+const BASE_URL = "3d-library";
 import * as THREE from "three";
-import { CONFIG } from "/3d-library/js/config.js";
+import { CONFIG } from `/${BASE_URL}/js/config.js`;
 
 // Убираем initScene, так как теперь он в main.js
 

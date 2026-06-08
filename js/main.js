@@ -1,17 +1,18 @@
+const BASE_URL = "3d-library";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
-import { CONFIG } from "/3d-library/js/config.js";
-import { setupLighting, setupHelpers } from "/3d-library/js/sceneManager.js";
-import { loadModel } from "/3d-library/js/modelLoader.js";
+import { CONFIG } from `/${BASE_URL}/js/config.js`;
+import { setupLighting, setupHelpers } from `/${BASE_URL}/js/sceneManager.js`;
+import { loadModel } from `/${BASE_URL}/js/modelLoader.js`;
 import {
   initUI,
   showLoading,
   showError,
   updateCameraControls,
-} from "/3d-library/js/uiController.js";
+} from `/${BASE_URL}/js/uiController.js`;
 
 // Глобальные переменные
 let scene, camera, renderer, controls;
