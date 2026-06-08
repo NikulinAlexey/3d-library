@@ -5,13 +5,13 @@ import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
 import { CONFIG } from "3d-library/js/config.js";
 import { setupLighting, setupHelpers } from "3d-library/js/sceneManager.js";
-import { loadModel, removeCurrentModel } from "3d-library/modelLoader.js";
+import { loadModel, removeCurrentModel } from "3d-library/js/modelLoader.js";
 import {
   initUI,
   showLoading,
   showError,
   updateCameraControls,
-} from "3d-library//uiController.js";
+} from "3d-library/js/uiController.js";
 
 // Глобальные переменные
 let scene, camera, renderer, controls;
