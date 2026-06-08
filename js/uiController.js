@@ -34,7 +34,7 @@ export function initUI(models, onSelectModel) {
 export function showLoading(loadingIndicator, show) {
   if (loadingIndicator && show) {
     loadingIndicator.classList.add = "_visible";
-  } else {
+  } else if (!loadingIndicator && !show) {
     loadingIndicator.classList.remove = "_visible";
   }
 }
