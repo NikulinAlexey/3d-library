@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { CONFIG } from "/config.js";
+import { CONFIG } from "/3d-library/js/config.js";
 
 // Убираем initScene, так как теперь он в main.js
 
