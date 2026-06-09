@@ -114,28 +114,3 @@ select option {
 .loading-indicator._visible {
   display: block;
 }
-
-@media (max-width: 600px) {
-  .model-selector {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 8px 14px;
-    top: 12px;
-    right: 12px;
-  }
-
-  select {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
-
-  .model-selector label {
-    font-size: 12px;
-  }
-
-  .info-panel {
-    font-size: 9px;
-    bottom: 10px;
-    left: 10px;
-  }
-}

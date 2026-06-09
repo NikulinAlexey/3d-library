@@ -32,10 +32,15 @@ export function initUI(models, onSelectModel) {
 }
 
 export function showLoading(loadingIndicator, show) {
-  if (loadingIndicator)
-    show
-      ? loadingIndicator.classList.add("_visible")
-      : loadingIndicator.classList.remove("_visible");
+  if (!loadingIndicator) return;
+
+  if (show) {
+    loadingIndicator.classList.add("_visible");
+    loadingIndicator.style.display = "block";
+  } else {
+    loadingIndicator.classList.remove("_visible");
+    loadingIndicator.style.display = "none";
+  }
 }
 
 export function showError(errorDiv, message) {
