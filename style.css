@@ -129,5 +129,5 @@
 
 .loader._visible {
   display: block;
-  box-shadow: 0 0 10000px 10000px rgba(34, 60, 80, 1);
+  box-shadow: 0 0 10000px 10000px rgba(34, 60, 80, 0.2);
 }
