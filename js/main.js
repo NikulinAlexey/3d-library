@@ -28,7 +28,7 @@ async function fetchModelsList() {
   } catch (error) {
     console.error("Failed to load models list:", error);
     showError(
-      document.getElementById("errorMsg"),
+      document.querySelector("[data-message]"),
       `Ошибка загрузки списка моделей: ${error.message}`,
     );
     return [];
@@ -36,25 +36,41 @@ async function fetchModelsList() {
 }
 
 async function onSelectModel(modelInfo) {
-  const loadingIndicator = document.querySelector(".loading-indicator");
-  const errorDiv = document.getElementById("errorMsg");
+  const loadingIndicator = document.querySelector("[data-loader]");
+  const errorDiv = document.querySelector("[data-message]");
 
   showLoading(loadingIndicator, true);
   try {
-    // Удаляем текущую модель
+    // Удаляем старую модель, если она есть
     if (currentModel) {
       scene.remove(currentModel);
+      // Опционально: очистка геометрии и материалов
+      if (currentModel.isGroup) {
+        currentModel.traverse((child) => {
+          if (child.isMesh) {
+            child.geometry.dispose();
+            if (child.material) {
+              if (Array.isArray(child.material))
+                child.material.forEach((m) => m.dispose());
+              else child.material.dispose();
+            }
+          }
+        });
+      } else if (currentModel.isMesh) {
+        currentModel.geometry.dispose();
+        if (currentModel.material) currentModel.material.dispose();
+      }
       currentModel = null;
     }
 
-    // Загружаем новую
-    currentModel = await loadModel(
-      scene,
-      modelInfo,
-      () => {},
-      (errMsg) => showError(errorDiv, errMsg),
-    );
+    // Загружаем новую модель
+    const newModel = await loadModel(scene, modelInfo);
+    currentModel = newModel;
+
     updateCameraControls(controls, camera);
+  } catch (err) {
+    console.error(err);
+    showError(errorDiv, `Ошибка загрузки: ${err.message}`);
   } finally {
     showLoading(loadingIndicator, false);
   }
@@ -62,7 +78,7 @@ async function onSelectModel(modelInfo) {
 
 function initScene() {
   // Получаем canvas из HTML
-  const canvas = document.getElementById("modelCanvas");
+  const canvas = document.querySelector("[data-canvas]");
   if (!canvas) {
     console.error("Canvas element not found!");
     return null;

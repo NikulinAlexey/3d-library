@@ -11,28 +11,34 @@
     <!-- Добавляем favicon чтобы убрать ошибку 404 -->
     <link
       rel="icon"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 90'><text y='.9em' font-size='90'>🎮</text></svg>"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>🎮</text></svg>"
     />
   </head>
-  <body>
-    <canvas id="modelCanvas" class="model-canvas"></canvas>
+  <body class="body">
+    <canvas data-canvas class="canvas"></canvas>
 
-    <div class="model-selector-wrapper">
-      <div class="model-selector">
-        <label>📦 3D Модель:</label>
-        <select id="modelSelect">
-          <option value="" disabled selected>-- Загрузка моделей... --</option>
-        </select>
+    <div class="overlay">
+      <div class="select">
+        <div class="select__container">
+          <label class="select__label">📦 3D Модель:</label>
+          <select class="select__item" data-model-select>
+            <option class="select__option" value="" disabled selected>
+              Загрузка моделей ⏳
+            </option>
+          </select>
+        </div>
       </div>
+      <div class="loader" data-loader>⏳ Загрузка модели...</div>
+        <div class="panel">
+          🖱️ Зажмите ЛКМ и двигайте мышь для вращения модели
+        </div>
+
+        <div
+          class="error-message"
+          data-message
+          style="display: none"
+        ></div>
     </div>
-
-    <div class="loading-indicator" id="loading-indicator">⏳ Загрузка модели...</div>
-
-    <div class="info-panel">
-      🖱️ Зажмите ЛКМ и двигайте мышь для вращения модели
-    </div>
-
-    <div class="error-message" id="errorMsg" style="display: none"></div>
 
     <!-- Импорты через CDN с правильными путями -->
     <script type="importmap">

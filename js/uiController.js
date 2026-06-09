@@ -1,8 +1,8 @@
-const loadingIndicator = document.querySelector(".loading-indicator");
+const loadingIndicator = document.querySelector("[data-loader]");
 
 export function initUI(models, onSelectModel) {
-  const selectEl = document.getElementById("modelSelect");
-  const errorDiv = document.getElementById("errorMsg");
+  const selectEl = document.querySelector("[data-model-select]");
+  const errorDiv = document.querySelector("[data-message]");
 
   if (!models || models.length === 0) {
     showError(errorDiv, "Список моделей пуст. Проверьте models.json");

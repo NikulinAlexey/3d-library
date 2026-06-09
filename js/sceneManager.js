@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import { CONFIG } from "/3d-library/js/config.js";
 
-// Убираем initScene, так как теперь он в main.js
 
 export function setupLighting(scene) {
   // Ambient light
