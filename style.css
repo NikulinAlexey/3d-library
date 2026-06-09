@@ -16,6 +16,7 @@
   position: fixed;
   inset: 0;
   z-index: 100;
+  pointer-events: none;
 }
 
 /* Стили для фиксированной панели выбора модели */
@@ -25,6 +26,7 @@
   right: 0;
   width: fit-content;
   padding: 8px;
+  pointer-events: auto;
 }
 
 .select__container {
@@ -91,12 +93,12 @@
 }
 
 .error-message {
-  position: fixed;
+  position: absolute;
   bottom: 20px;
   right: 20px;
   background: rgba(220, 50, 50, 0.9);
   backdrop-filter: blur(8px);
-  padding: 8px 15px;
+  padding: 8px 16px;
   border-radius: 20px;
   font-size: 12px;
   color: white;
