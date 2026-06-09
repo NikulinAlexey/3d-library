@@ -124,9 +124,10 @@
   padding: 8px 16px;
   border-radius: 20px;
   display: none;
+  z-index: 110;
 }
 
 .loader._visible {
   display: block;
-  box-shadow: 100px 100px 100px black;
+  box-shadow: 0 0 1000px 1000px rgba(34, 60, 80, 1);
 }
