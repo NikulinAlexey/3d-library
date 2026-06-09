@@ -1,4 +1,4 @@
-const loadingIndicator = document.querySelector("loading-indicator");
+const loadingIndicator = document.querySelector(".loading-indicator");
 
 export function initUI(models, onSelectModel) {
   const selectEl = document.getElementById("modelSelect");
@@ -36,10 +36,8 @@ export function showLoading(loadingIndicator, show) {
 
   if (show) {
     loadingIndicator.classList.add("_visible");
-    loadingIndicator.style.display = "block";
   } else {
     loadingIndicator.classList.remove("_visible");
-    loadingIndicator.style.display = "none";
   }
 }
 
