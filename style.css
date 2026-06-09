@@ -72,15 +72,22 @@
 /* Информация о загрузке и статусе */
 .panel {
   position: absolute;
-  bottom: 20px;
-  left: 20px;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  padding: 8px;
+}
+
+.panel__container {
+  padding: 8px 16px;
+  border-radius: 20px;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(5px);
-  padding: 6px 12px;
-  border-radius: 20px;
+}
+
+.panel__text {
   font-size: 12px;
   color: #ccc;
-  pointer-events: none;
 }
 
 .error-message {
