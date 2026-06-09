@@ -66,6 +66,12 @@
   border-color: rgba(255, 255, 255, 0.6);
 }
 
+.select__item:disabled {
+  cursor: not-allowed;
+  background: rgba(3, 3, 3, 0.9);
+  color: rgb(145, 145, 145);
+}
+
 .select__option {
   background: #2a2a2e;
   color: white;
@@ -122,4 +128,5 @@
 
 .loader._visible {
   display: block;
+  box-shadow: 100px 100px 100px black;
 }

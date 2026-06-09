@@ -1,9 +1,7 @@
-const loadingIndicator = document.querySelector("[data-loader]");
+const selectEl = document.querySelector("[data-model-select]");
+const errorDiv = document.querySelector("[data-message]");
 
 export function initUI(models, onSelectModel) {
-  const selectEl = document.querySelector("[data-model-select]");
-  const errorDiv = document.querySelector("[data-message]");
-
   if (!models || models.length === 0) {
     showError(errorDiv, "Список моделей пуст. Проверьте models.json");
     return;
@@ -36,8 +34,10 @@ export function showLoading(loadingIndicator, show) {
 
   if (show) {
     loadingIndicator.classList.add("_visible");
+    selectEl.disabled = true;
   } else {
     loadingIndicator.classList.remove("_visible");
+    selectEl.disabled = false;
   }
 }
 
