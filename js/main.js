@@ -1,17 +1,14 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
-import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
-import { CONFIG } from "/3d-library/js/config.js";
-import { setupLighting, setupHelpers } from "/3d-library/js/sceneManager.js";
-import { loadModel } from "/3d-library/js/modelLoader.js";
+import { CONFIG } from "/js/config.js";
+import { setupLighting, setupHelpers } from "/js/sceneManager.js";
+import { loadModel, disposeModel } from "/js/modelLoader.js";
 import {
   initUI,
   showLoading,
   showError,
   updateCameraControls,
-} from "/3d-library/js/uiController.js";
+} from "/js/uiController.js";
 
 // Глобальные переменные
 let scene, camera, renderer, controls;
@@ -41,29 +38,12 @@ async function onSelectModel(modelInfo) {
 
   showLoading(loadingIndicator, true);
   try {
-    // Удаляем старую модель, если она есть
     if (currentModel) {
       scene.remove(currentModel);
-      // Опционально: очистка геометрии и материалов
-      if (currentModel.isGroup) {
-        currentModel.traverse((child) => {
-          if (child.isMesh) {
-            child.geometry.dispose();
-            if (child.material) {
-              if (Array.isArray(child.material))
-                child.material.forEach((m) => m.dispose());
-              else child.material.dispose();
-            }
-          }
-        });
-      } else if (currentModel.isMesh) {
-        currentModel.geometry.dispose();
-        if (currentModel.material) currentModel.material.dispose();
-      }
+      disposeModel(currentModel);
       currentModel = null;
     }
 
-    // Загружаем новую модель
     const newModel = await loadModel(scene, modelInfo);
     currentModel = newModel;
 
@@ -77,19 +57,16 @@ async function onSelectModel(modelInfo) {
 }
 
 function initScene() {
-  // Получаем canvas из HTML
   const canvas = document.querySelector("[data-canvas]");
   if (!canvas) {
     console.error("Canvas element not found!");
     return null;
   }
 
-  // Создаём сцену
   scene = new THREE.Scene();
   scene.background = new THREE.Color(CONFIG.COLORS.background);
   scene.fog = new THREE.FogExp2(CONFIG.COLORS.fog, 0.008);
 
-  // Камера
   camera = new THREE.PerspectiveCamera(
     CONFIG.CAMERA.fov,
     window.innerWidth / window.innerHeight,
@@ -102,17 +79,15 @@ function initScene() {
     CONFIG.CAMERA.position.z,
   );
 
-  // Рендерер с существующим canvas
   renderer = new THREE.WebGLRenderer({
     antialias: true,
     canvas: canvas,
     powerPreference: "high-performance",
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.shadowMap.enabled = true;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = false;
 
-  // Элементы управления
   controls = new OrbitControls(camera, canvas);
   controls.enableDamping = CONFIG.CONTROLS.enableDamping;
   controls.dampingFactor = CONFIG.CONTROLS.dampingFactor;
@@ -123,53 +98,19 @@ function initScene() {
   controls.target.set(
     CONFIG.CONTROLS.target.x,
     CONFIG.CONTROLS.target.y,
-    CONFIG.CONFIG?.target?.z || 0,
+    CONFIG.CONTROLS.target.z,
   );
   controls.update();
 
   return { scene, camera, renderer, controls };
 }
 
-async function init() {
-  // Инициализируем сцену
-  const sceneData = initScene();
-  if (!sceneData) return;
+let lastTime = 0;
+const FPS_LIMIT = 30;
 
-  scene = sceneData.scene;
-  camera = sceneData.camera;
-  renderer = sceneData.renderer;
-  controls = sceneData.controls;
-
-  // Настраиваем освещение и вспомогательные элементы
-  setupLighting(scene);
-  setupHelpers(scene);
-
-  // Загружаем список моделей
-  const models = await fetchModelsList();
-  if (models.length === 0) {
-    // Демо-куб, если нет моделей
-    const geometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
-    const material = new THREE.MeshStandardMaterial({
-      color: 0xffaa55,
-      emissive: 0x442200,
-    });
-    const demoBox = new THREE.Mesh(geometry, material);
-    demoBox.position.y = -0.3;
-    demoBox.castShadow = true;
-    scene.add(demoBox);
-    currentModel = demoBox;
-    return;
-  }
-
-  // Инициализируем UI
-  initUI(models, onSelectModel);
-
-  // Запускаем анимацию
-  animate();
-}
-
-function animate() {
+function animate(currentTime = 0) {
   requestAnimationFrame(animate);
+
   const delta = currentTime - lastTime;
   if (delta < 1000 / FPS_LIMIT) return;
   lastTime = currentTime;
@@ -180,7 +121,37 @@ function animate() {
   }
 }
 
-// Обработчик изменения размера окна
+async function init() {
+  const sceneData = initScene();
+  if (!sceneData) return;
+
+  scene = sceneData.scene;
+  camera = sceneData.camera;
+  renderer = sceneData.renderer;
+  controls = sceneData.controls;
+
+  setupLighting(scene);
+  setupHelpers(scene);
+
+  const models = await fetchModelsList();
+  if (models.length === 0) {
+    const geometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
+    const material = new THREE.MeshStandardMaterial({
+      color: 0xffaa55,
+      emissive: 0x442200,
+    });
+    const demoBox = new THREE.Mesh(geometry, material);
+    demoBox.position.y = -0.3;
+    demoBox.castShadow = false;
+    scene.add(demoBox);
+    currentModel = demoBox;
+    return;
+  }
+
+  initUI(models, onSelectModel);
+  animate();
+}
+
 window.addEventListener("resize", () => {
   if (camera) {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -189,5 +160,12 @@ window.addEventListener("resize", () => {
   }
 });
 
-// Запуск приложения
+window.addEventListener("beforeunload", () => {
+  if (currentModel) {
+    disposeModel(currentModel);
+    scene.remove(currentModel);
+    currentModel = null;
+  }
+});
+
 init();

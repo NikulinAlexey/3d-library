@@ -1,8 +1,6 @@
 export const CONFIG = {
-  // URL до вашего JSON-файла со списком моделей
   MODELS_LIST_URL: "https://nikulinalexey.github.io/ar-models/models.json",
 
-  // Настройки камеры
   CAMERA: {
     fov: 45,
     near: 0.1,
@@ -10,7 +8,6 @@ export const CONFIG = {
     position: { x: 3, y: 2, z: 5 },
   },
 
-  // Настройки элементов управления
   CONTROLS: {
     enableDamping: true,
     dampingFactor: 0.05,
@@ -20,13 +17,11 @@ export const CONFIG = {
     target: { x: 0, y: 0.5, z: 0 },
   },
 
-  // Настройки загрузки моделей
   MODEL: {
     targetHeight: 1.2,
     groundY: -0.7,
   },
 
-  // Цвета фона и тумана
   COLORS: {
     background: 0x111122,
     fog: 0x111122,

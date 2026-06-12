@@ -1,19 +1,15 @@
 import * as THREE from "three";
-import { CONFIG } from "/3d-library/js/config.js";
-
+import { CONFIG } from "/js/config.js";
 
 export function setupLighting(scene) {
   // Ambient light
   const ambientLight = new THREE.AmbientLight(0x404060);
   scene.add(ambientLight);
 
-  // Directional light (main)
+  // Directional light (main) - тени отключены для производительности
   const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
   mainLight.position.set(2, 5, 3);
   mainLight.castShadow = false;
-  // mainLight.castShadow = true;
-  // mainLight.shadow.mapSize.width = 1024;
-  // mainLight.shadow.mapSize.height = 1024;
   scene.add(mainLight);
 
   // Fill light (cool)
@@ -61,6 +57,6 @@ export function setupHelpers(scene) {
   const refPlane = new THREE.Mesh(new THREE.PlaneGeometry(5, 5), planeMat);
   refPlane.rotation.x = -Math.PI / 2;
   refPlane.position.y = -0.85;
-  refPlane.receiveShadow = true;
+  refPlane.receiveShadow = false;
   scene.add(refPlane);
 }
