@@ -10,9 +10,10 @@ export function setupLighting(scene) {
   // Directional light (main)
   const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
   mainLight.position.set(2, 5, 3);
-  mainLight.castShadow = true;
-  mainLight.shadow.mapSize.width = 1024;
-  mainLight.shadow.mapSize.height = 1024;
+  mainLight.castShadow = false;
+  // mainLight.castShadow = true;
+  // mainLight.shadow.mapSize.width = 1024;
+  // mainLight.shadow.mapSize.height = 1024;
   scene.add(mainLight);
 
   // Fill light (cool)

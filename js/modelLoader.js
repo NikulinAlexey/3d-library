@@ -8,6 +8,54 @@ const loaderGLTF = new GLTFLoader();
 const loaderOBJ = new OBJLoader();
 const loaderFBX = new FBXLoader();
 
+// НОВАЯ ФУНКЦИЯ: прогрессивная загрузка с отчётом о прогрессе
+export async function loadModelProgressive(scene, modelInfo, onProgress) {
+  try {
+    // Уведомляем о начале загрузки
+    if (onProgress) onProgress(10);
+
+    // Загружаем модель
+    const model = await loadModelByFormat(modelInfo.path, modelInfo.format);
+
+    if (onProgress) onProgress(60);
+
+    // Настраиваем модель
+    model.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+        if (child.material) {
+          if (Array.isArray(child.material)) {
+            child.material.forEach((mat) => {
+              mat.roughness = mat.roughness ?? 0.4;
+              mat.metalness = mat.metalness ?? 0.3;
+            });
+          } else {
+            child.material.roughness = child.material.roughness ?? 0.4;
+            child.material.metalness = child.material.metalness ?? 0.3;
+          }
+        }
+      }
+    });
+
+    centerAndScaleModel(model);
+
+    if (onProgress) onProgress(90);
+
+    // Небольшая задержка перед добавлением в сцену, чтобы не блокировать UI
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    scene.add(model);
+
+    if (onProgress) onProgress(100);
+    console.log(`✅ Model "${modelInfo.name}" loaded progressively`);
+    return model;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 // Кеш для уже загруженных моделей (опционально, для улучшения производительности)
 const modelCache = new Map();
 

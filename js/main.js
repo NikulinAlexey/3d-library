@@ -103,7 +103,11 @@ function initScene() {
   );
 
   // Рендерер с существующим canvas
-  renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvas });
+  renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    canvas: canvas,
+    powerPreference: "high-performance",
+  });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.shadowMap.enabled = true;
@@ -166,6 +170,10 @@ async function init() {
 
 function animate() {
   requestAnimationFrame(animate);
+  const delta = currentTime - lastTime;
+  if (delta < 1000 / FPS_LIMIT) return;
+  lastTime = currentTime;
+
   if (controls) controls.update();
   if (renderer && scene && camera) {
     renderer.render(scene, camera);
