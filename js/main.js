@@ -1,14 +1,14 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { CONFIG } from "/js/config.js";
-import { setupLighting, setupHelpers } from "/js/sceneManager.js";
-import { loadModel, disposeModel } from "/js/modelLoader.js";
+import { CONFIG } from "/3d-library/js/config.js";
+import { setupLighting, setupHelpers } from "/3d-library/js/sceneManager.js";
+import { loadModel, disposeModel } from "/3d-library/js/modelLoader.js";
 import {
   initUI,
   showLoading,
   showError,
   updateCameraControls,
-} from "/js/uiController.js";
+} from "/3d-library/js/uiController.js";
 
 // Глобальные переменные
 let scene, camera, renderer, controls;

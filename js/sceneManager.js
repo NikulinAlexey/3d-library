@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { CONFIG } from "/js/config.js";
+import { CONFIG } from "/3d-library/js/config.js";
 
 export function setupLighting(scene) {
   // Ambient light
