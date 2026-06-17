@@ -10,12 +10,12 @@ import {
   updateCameraControls,
 } from "/3d-library/js/uiController.js";
 
-// Глобальные переменные
+/// Глобальные переменные
 let scene, camera, renderer, controls;
 let currentModel = null;
 let modelsList = [];
 
-// ===== НОВЫЕ ФУНКЦИИ ДЛЯ РАБОТЫ С URL =====
+// ===== РАБОТА С URL =====
 
 // Получить ID модели из параметра 'model' в URL
 function getModelIdFromURL() {
@@ -34,7 +34,7 @@ function updateURL(modelId) {
   window.history.pushState({ modelId }, "", url);
 }
 
-// ===== ОСТАЛЬНЫЕ ФУНКЦИИ =====
+// ===== ОСНОВНЫЕ ФУНКЦИИ =====
 
 async function fetchModelsList() {
   try {
@@ -61,25 +61,27 @@ async function onSelectModel(modelInfo) {
 
   showLoading(loadingIndicator, true);
   try {
+    // Удаляем старую модель
     if (currentModel) {
       scene.remove(currentModel);
       disposeModel(currentModel);
       currentModel = null;
     }
 
+    // Загружаем новую модель
     const newModel = await loadModel(scene, modelInfo);
     currentModel = newModel;
 
-    // ===== ОБНОВЛЯЕМ URL ПОСЛЕ ЗАГРУЗКИ МОДЕЛИ =====
+    // Обновляем URL после загрузки
     updateURL(modelInfo.id);
 
-    updateCameraControls(controls, camera);
-
-    // Синхронизируем выпадающий список (если select существует)
-    const selectEl = document.querySelector("[data-select]");
+    // Синхронизируем выпадающий список
+    const selectEl = document.querySelector("[data-model-select]");
     if (selectEl) {
       selectEl.value = modelInfo.id;
     }
+
+    updateCameraControls(controls, camera);
   } catch (err) {
     console.error(err);
     showError(errorDiv, `Ошибка загрузки: ${err.message}`);
@@ -153,7 +155,10 @@ function animate(currentTime = 0) {
   }
 }
 
+// ===== ГЛАВНАЯ ФУНКЦИЯ ИНИЦИАЛИЗАЦИИ =====
+
 async function init() {
+  // 1. Настраиваем сцену
   const sceneData = initScene();
   if (!sceneData) return;
 
@@ -165,6 +170,7 @@ async function init() {
   setupLighting(scene);
   setupHelpers(scene);
 
+  // 2. Загружаем список моделей
   const models = await fetchModelsList();
 
   if (models.length === 0) {
@@ -183,11 +189,39 @@ async function init() {
     return;
   }
 
-  // ===== ИНИЦИАЛИЗАЦИЯ UI С ПЕРЕДАЧЕЙ ID МОДЕЛИ ИЗ URL =====
-  const initialModelId = getModelIdFromURL();
-  initUI(models, onSelectModel, initialModelId);
+  // 3. Инициализируем UI (заполняем select)
+  const selectEl = initUI(models);
 
-  // ===== ОБРАБОТКА СОБЫТИЯ "НАЗАД" В БРАУЗЕРЕ =====
+  // 4. Определяем модель для первоначальной загрузки
+  const modelIdFromURL = getModelIdFromURL();
+  let initialModel = null;
+  if (modelIdFromURL) {
+    initialModel = models.find((m) => m.id === modelIdFromURL);
+  }
+  // Если модель по ID не найдена или ID не был передан, берём первую
+  if (!initialModel) {
+    initialModel = models[0];
+  }
+
+  // 5. Синхронизируем select с найденной моделью
+  if (selectEl) {
+    selectEl.value = initialModel.id;
+  }
+
+  // 6. Загружаем нужную модель (единственный вызов на старте)
+  await onSelectModel(initialModel);
+
+  // 7. Обработчик изменения select
+  if (selectEl) {
+    selectEl.onchange = (event) => {
+      const selectedId = event.target.value;
+      if (!selectedId) return;
+      const selectedModel = models.find((m) => m.id === selectedId);
+      if (selectedModel) onSelectModel(selectedModel);
+    };
+  }
+
+  // 8. Обработчик события "назад" в браузере
   window.addEventListener("popstate", () => {
     const modelId = getModelIdFromURL();
     if (modelId) {
@@ -198,10 +232,12 @@ async function init() {
     }
   });
 
+  // 9. Запускаем цикл анимации
   animate();
 }
 
-// Обработчик изменения размера окна
+// ===== ОБРАБОТЧИКИ СОБЫТИЙ ОКНА =====
+
 window.addEventListener("resize", () => {
   if (camera) {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -210,7 +246,6 @@ window.addEventListener("resize", () => {
   }
 });
 
-// Очистка ресурсов при закрытии
 window.addEventListener("beforeunload", () => {
   if (currentModel) {
     disposeModel(currentModel);
@@ -219,5 +254,6 @@ window.addEventListener("beforeunload", () => {
   }
 });
 
-// Запуск приложения
+// ===== ЗАПУСК =====
+
 init();
