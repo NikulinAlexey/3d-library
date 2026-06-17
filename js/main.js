@@ -15,6 +15,27 @@ let scene, camera, renderer, controls;
 let currentModel = null;
 let modelsList = [];
 
+// ===== НОВЫЕ ФУНКЦИИ ДЛЯ РАБОТЫ С URL =====
+
+// Получить ID модели из параметра 'model' в URL
+function getModelIdFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get("model");
+}
+
+// Обновить URL, добавив параметр 'model' с ID текущей модели
+function updateURL(modelId) {
+  const url = new URL(window.location);
+  if (modelId) {
+    url.searchParams.set("model", modelId);
+  } else {
+    url.searchParams.delete("model");
+  }
+  window.history.pushState({ modelId }, "", url);
+}
+
+// ===== ОСТАЛЬНЫЕ ФУНКЦИИ =====
+
 async function fetchModelsList() {
   try {
     const response = await fetch(CONFIG.MODELS_LIST_URL);
@@ -36,6 +57,8 @@ async function onSelectModel(modelInfo) {
   const loadingIndicator = document.querySelector("[data-loader]");
   const errorDiv = document.querySelector("[data-message]");
 
+  if (!modelInfo) return;
+
   showLoading(loadingIndicator, true);
   try {
     if (currentModel) {
@@ -47,7 +70,16 @@ async function onSelectModel(modelInfo) {
     const newModel = await loadModel(scene, modelInfo);
     currentModel = newModel;
 
+    // ===== ОБНОВЛЯЕМ URL ПОСЛЕ ЗАГРУЗКИ МОДЕЛИ =====
+    updateURL(modelInfo.id);
+
     updateCameraControls(controls, camera);
+
+    // Синхронизируем выпадающий список (если select существует)
+    const selectEl = document.querySelector("[data-select]");
+    if (selectEl) {
+      selectEl.value = modelInfo.id;
+    }
   } catch (err) {
     console.error(err);
     showError(errorDiv, `Ошибка загрузки: ${err.message}`);
@@ -134,7 +166,9 @@ async function init() {
   setupHelpers(scene);
 
   const models = await fetchModelsList();
+
   if (models.length === 0) {
+    // Демо-куб, если нет моделей
     const geometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
     const material = new THREE.MeshStandardMaterial({
       color: 0xffaa55,
@@ -145,13 +179,29 @@ async function init() {
     demoBox.castShadow = false;
     scene.add(demoBox);
     currentModel = demoBox;
+    animate();
     return;
   }
 
-  initUI(models, onSelectModel);
+  // ===== ИНИЦИАЛИЗАЦИЯ UI С ПЕРЕДАЧЕЙ ID МОДЕЛИ ИЗ URL =====
+  const initialModelId = getModelIdFromURL();
+  initUI(models, onSelectModel, initialModelId);
+
+  // ===== ОБРАБОТКА СОБЫТИЯ "НАЗАД" В БРАУЗЕРЕ =====
+  window.addEventListener("popstate", () => {
+    const modelId = getModelIdFromURL();
+    if (modelId) {
+      const model = models.find((m) => m.id === modelId);
+      if (model) {
+        onSelectModel(model);
+      }
+    }
+  });
+
   animate();
 }
 
+// Обработчик изменения размера окна
 window.addEventListener("resize", () => {
   if (camera) {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -160,6 +210,7 @@ window.addEventListener("resize", () => {
   }
 });
 
+// Очистка ресурсов при закрытии
 window.addEventListener("beforeunload", () => {
   if (currentModel) {
     disposeModel(currentModel);
@@ -168,4 +219,5 @@ window.addEventListener("beforeunload", () => {
   }
 });
 
+// Запуск приложения
 init();
