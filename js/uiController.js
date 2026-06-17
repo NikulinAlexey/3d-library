@@ -1,13 +1,17 @@
+// uiController.js
+
 const selectEl = document.querySelector("[data-model-select]");
 const errorDiv = document.querySelector("[data-message]");
 
-export function initUI(models, onSelectModel) {
+// ===== ИЗМЕНЁННАЯ ФУНКЦИЯ initUI =====
+// Теперь она принимает третий аргумент — initialModelId
+export function initUI(models, onSelectModel, initialModelId) {
   if (!models || models.length === 0) {
     showError(errorDiv, "Список моделей пуст. Проверьте models.json");
     return;
   }
 
-  // Populate select
+  // Populate select (без изменений)
   selectEl.innerHTML = "";
   models.forEach((model) => {
     const option = document.createElement("option");
@@ -16,11 +20,26 @@ export function initUI(models, onSelectModel) {
     selectEl.appendChild(option);
   });
 
-  // Select first model by default
-  selectEl.value = models[0].id;
-  onSelectModel(models[0]);
+  // ===== НОВАЯ ЛОГИКА ВЫБОРА НАЧАЛЬНОЙ МОДЕЛИ =====
+  let initialModel = null;
 
-  // Event handler
+  // 1. Если передан ID из URL, ищем модель по нему
+  if (initialModelId) {
+    initialModel = models.find((m) => m.id === initialModelId);
+  }
+
+  // 2. Если модель не найдена или ID не был передан, берём первую
+  if (!initialModel) {
+    initialModel = models[0];
+  }
+
+  // Устанавливаем выбранное значение в select
+  selectEl.value = initialModel.id;
+
+  // Загружаем модель (теперь уже правильную)
+  onSelectModel(initialModel);
+
+  // Event handler (без изменений)
   selectEl.onchange = (event) => {
     const selectedId = event.target.value;
     if (!selectedId) return;
@@ -28,6 +47,7 @@ export function initUI(models, onSelectModel) {
     if (selectedModel) onSelectModel(selectedModel);
   };
 }
+
 
 export function showLoading(loadingIndicator, show) {
   if (!loadingIndicator) return;
